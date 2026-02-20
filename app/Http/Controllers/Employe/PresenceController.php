@@ -13,13 +13,14 @@ use Inertia\Inertia;
 
 class PresenceController extends Controller
 {
-/**
+    /**
      * Afficher la page de signalement d'arrivée
      */
     public function createArrivee()
     {
         $user = auth()->user();
-        
+        // dd($user);
+
         // Vérifier si l'utilisateur a déjà une présence aujourd'hui
         $presenceToday = Presence::where('user_id', $user->id)
             ->whereDate('date_presence', Carbon::today())
@@ -38,8 +39,9 @@ class PresenceController extends Controller
      */
     public function storeArrivee(ArriveeRequest $request)
     {
+
         $user = auth()->user();
-        
+
         // Vérifier une dernière fois
         $existingPresence = Presence::where('user_id', $user->id)
             ->whereDate('date_presence', Carbon::today())
@@ -68,7 +70,7 @@ class PresenceController extends Controller
     public function createDepart()
     {
         $user = auth()->user();
-        
+
         // Récupérer la présence du jour
         $presence = Presence::where('user_id', $user->id)
             ->whereDate('date_presence', Carbon::today())
@@ -112,7 +114,7 @@ class PresenceController extends Controller
         // Upload des justificatifs
         foreach ($request->file('justificatifs') as $file) {
             $path = $file->store('justificatifs/' . $presence->id, 'public');
-            
+
             Justificatif::create([
                 'presence_id' => $presence->id,
                 'nom_fichier' => $file->getClientOriginalName(),
@@ -132,7 +134,7 @@ class PresenceController extends Controller
     public function historique()
     {
         $user = auth()->user();
-        
+
         $presences = Presence::where('user_id', $user->id)
             ->with('justificatifs')
             ->orderBy('date_presence', 'desc')

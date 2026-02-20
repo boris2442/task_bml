@@ -2,29 +2,53 @@
 import { Head, useForm } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { dashboard } from '@/routes';
-import presence from '@/routes/presence';
-import { ref } from 'vue';
+// import { dashboard } from '@/routes';
+import presence from '@/routes/presence/arrivee'; // <- Cherche arrivee.ts mais vous avez arrive/index.ts
+import { dashboard } from '@/routes'; // Import direct
+import { computed } from 'vue';
+const ARRIVEE_STORE_URL = '/presence/arrivee';
+// On définit l'heure actuelle au format HH:mm pour l'input
+const now = new Date();
+const currentTime =
+    now.getHours().toString().padStart(2, '0') +
+    ':' +
+    now.getMinutes().toString().padStart(2, '0');
 
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard().url,
-    },
-    {
-        title: 'Signaler arrivée',
-        href: presence.arrivee().url,
-    },
+    { title: 'Dashboard', href: dashboard().url },
+    //   { title: 'Signaler arrivée', href: presence.arrivee().url },
 ];
 
 const form = useForm({
     description: '',
+    heure_arrivee: currentTime, // Heure par défaut
 });
 
+// Calcul automatique de l'heure de fin (ex: + 8 heures)
+const heureDeFinEstimee = computed(() => {
+    if (!form.heure_arrivee) return '--:--';
+
+    const [hours, minutes] = form.heure_arrivee.split(':').map(Number);
+    const date = new Date();
+    date.setHours(hours + 4, minutes); // On ajoute 8 heures de travail
+
+    return date.toLocaleTimeString('fr-FR', {
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+});
+
+// const submit = () => {
+//     form.post(presence.store, {
+//         preserveScroll: true,
+//     });
+// };
+console.log('arriveeRoutes:', presence); // Vérifiez dans la console
 const submit = () => {
-    // form.post(presence.arrivee().store.url, {
-    //     preserveScroll: true,
-    // });
+    // UTILISER L'URL EN DUR
+    form.post('/presence/arrivee', {
+        preserveScroll: true,
+    });
 };
 </script>
 
@@ -51,6 +75,35 @@ const submit = () => {
             <!-- Formulaire -->
             <div class="max-w-2xl">
                 <form @submit.prevent="submit" class="space-y-6">
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div
+                            class="rounded-lg bg-blue-50 p-4 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200"
+                        >
+                            <label
+                                for="heure_arrivee"
+                                class="mb-1 block text-sm font-medium"
+                            >
+                                ⏰ Heure d'arrivée :
+                            </label>
+                            <input
+                                type="time"
+                                id="heure_arrivee"
+                                v-model="form.heure_arrivee"
+                                class="block w-full rounded-lg border border-blue-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-blue-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                            />
+                        </div>
+
+                        <div
+                            class="flex flex-col justify-center rounded-lg bg-green-50 p-4 text-green-800 dark:bg-green-900/50 dark:text-green-200"
+                        >
+                            <p class="text-sm">🏁 Heure de fin prévue (4h) :</p>
+                            <p class="text-2xl font-bold">
+                                {{ heureDeFinEstimee }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div></div>
                     <!-- Message d'information -->
                     <div
                         class="rounded-lg bg-blue-50 p-4 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200"

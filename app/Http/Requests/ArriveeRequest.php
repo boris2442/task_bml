@@ -25,4 +25,11 @@ class ArriveeRequest extends FormRequest
             'description' => 'required|string|min:30',
         ];
     }
+      public function messages(): array
+    {
+        return [
+            'description.required' => 'La description est obligatoire',
+            'description.min' => 'La description doit contenir au moins 30 caractères',
+        ];
+    }
 }
