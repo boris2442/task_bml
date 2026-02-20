@@ -11,13 +11,9 @@ import {
 } from 'lucide-vue-next';
 
 const page = usePage();
-
-// États
 const show = ref(false);
 const message = ref('');
 const type = ref<'success' | 'error' | 'warning' | 'info'>('info');
-const timeout = ref(5000); // 5 secondes par défaut
-const timer = ref(null);
 
 // Icônes selon le type
 const icons = {
@@ -37,7 +33,22 @@ const colors = {
     info: 'bg-blue-50 text-blue-800 border-blue-200 dark:bg-blue-900/50 dark:text-blue-200 dark:border-blue-800',
 };
 
-// Surveiller les messages flash dans les props Inertia
+// DÉCLARER D'ABORD la fonction showMessage
+const showMessage = (
+    msg: string,
+    msgType: 'success' | 'error' | 'warning' | 'info',
+) => {
+    message.value = msg;
+    type.value = msgType;
+    show.value = true;
+
+    // Auto-fermeture après 5 secondes
+    setTimeout(() => {
+        show.value = false;
+    }, 5000);
+};
+
+// ENSUITE utiliser watch (qui utilise showMessage)
 watch(
     () => page.props.flash,
     (flash: any) => {
@@ -54,35 +65,12 @@ watch(
     { deep: true, immediate: true },
 );
 
-// Afficher le message
-const showMessage = (
-    msg: string,
-    msgType: 'success' | 'error' | 'warning' | 'info',
-) => {
-    message.value = msg;
-    type.value = msgType;
-    show.value = true;
-
-    // Auto-fermeture après timeout
-    if (timer.value) clearTimeout(timer.value);
-    timer.value = setTimeout(() => {
-        close();
-    }, timeout.value);
-};
-
-// Fermer le message
 const close = () => {
     show.value = false;
-    message.value = '';
-    if (timer.value) {
-        clearTimeout(timer.value);
-        timer.value = null;
-    }
 };
 
-// Nettoyer le timer
+// Vérifier au chargement initial
 onMounted(() => {
-    // Vérifier s'il y a un message flash au chargement
     const flash = (page.props.flash as any) || {};
     if (flash.success) showMessage(flash.success, 'success');
     else if (flash.error) showMessage(flash.error, 'error');
@@ -122,7 +110,7 @@ onMounted(() => {
                         {{ message }}
                     </div>
 
-                    <!-- Bouton fermer -->
+                    <!-- Bouton fermer avec croix -->
                     <button
                         @click="close"
                         class="flex-shrink-0 rounded-lg p-1.5 hover:bg-black/5 dark:hover:bg-white/5"
@@ -133,12 +121,8 @@ onMounted(() => {
 
                 <!-- Barre de progression (optionnelle) -->
                 <div
-                    v-if="timeout > 0"
                     class="absolute bottom-0 left-0 h-1 rounded-b-lg bg-black/10 dark:bg-white/10"
-                    :style="{
-                        width: '100%',
-                        animation: `shrink ${timeout}ms linear`,
-                    }"
+                    :style="{ width: '100%', animation: 'shrink 5s linear' }"
                 ></div>
             </div>
         </div>

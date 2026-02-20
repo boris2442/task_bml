@@ -3,7 +3,8 @@ import { Head, useForm } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { dashboard } from '@/routes';
-import presence from '@/routes/presence';
+import presence from '@/routes/presence/depart';
+
 import { ref } from 'vue';
 
 const props = defineProps<{
@@ -19,10 +20,10 @@ const breadcrumbs: BreadcrumbItem[] = [
         title: 'Dashboard',
         href: dashboard().url,
     },
-    {
-        title: 'Signaler départ',
-        href: presence.depart().url,
-    },
+    // {
+    //     title: 'Signaler départ',
+    //     href: presence.store().url,
+    // },
 ];
 
 const form = useForm({
@@ -44,7 +45,10 @@ const removeFile = (index: number) => {
 };
 
 const submit = () => {
-    form.post(presence().depart.store.url(props.presence.id), {
+    // form.post(presence().depart.store.url(props.presence.id), {
+    //     preserveScroll: true,
+    // });
+    form.post(`/presence/depart/${props.presence.id}`, {
         preserveScroll: true,
     });
 };

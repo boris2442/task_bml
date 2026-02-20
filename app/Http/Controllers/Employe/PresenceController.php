@@ -124,8 +124,11 @@ class PresenceController extends Controller
             ]);
         }
 
-        return redirect()->route('dashboard')
-            ->with('success', 'Départ signalé. En attente de validation.');
+        // return redirect()->route('dashboard')
+        //     ->with('success', 'Départ signalé. En attente de validation.');
+
+        return redirect()->route('presence.historique')  // Redirection vers Historique
+            ->with('success', 'Arrivée signalée avec succès. En attente d\'approbation.');
     }
 
     /**
