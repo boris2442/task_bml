@@ -1,0 +1,82 @@
+┌─────────────────┐       ┌─────────────────┐
+│    UTILISATEUR  │       │   PRESENCE      │
+├─────────────────┤       ├─────────────────┤
+│PK id_utilisateur│       │PK id_presence   │
+│   matricule     │──────►│FK id_utilisateur│
+│   nom           │  1,n  │   date_presence │
+│   prenom        │       │   heure_arrivee │
+│   email         │       │   heure_depart  │
+│   mot_de_passe  │       │   statut        │
+│   role          │       │   description   │
+│   date_inscript.│       └────────┬────────┘
+└─────────────────┘                │
+                                   │1,n
+                                   │
+                          ┌────────▼────────┐      ┌─────────────────┐
+                          │  JUSTIFICATIF   │      │   APPROBATION   │
+                          ├─────────────────┤      ├─────────────────┤
+                          │PK id_justificatif│      │PK id_approbation│
+                          │FK id_presence   │      │FK id_presence   │
+                          │   nom_fichier   │      │FK id_admin      │──────┐
+                          │   chemin_fichier│      │   type_approb.  │      │
+                          │   type_fichier  │      │   date_approb.  │      │
+                          │   taille        │      │   statut_app.   │      │
+                          │   date_upload   │      │   commentaire   │      │
+                          └─────────────────┘      └─────────────────┘      │
+                                                                             │
+                                                                   ┌─────────▼─────────┐
+                                                                   │   UTILISATEUR     │
+                                                                   │   (admin)         │
+                                                                   └───────────────────┘
+
+
+
+
+Module 1 : Cœur de l'application ✅
+Migrations (4 tables)
+
+Module 2 : Authentification & Modèles
+Modèles User, Presence, Justificatif, Approbation
+
+Relations entre modèles
+
+Factories pour données de test
+
+Installation de Breeze/Jetstream avec Inertia
+
+Middleware Admin
+
+Module 3 : Base frontend
+Layouts Inertia
+
+Composants communs
+
+Pages de base (accueil, login, register)
+
+Module 4 : Espace employé
+Dashboard employé
+
+Signalement arrivée
+
+Signalement départ + upload
+
+Historique
+
+Module 5 : Espace admin
+Dashboard admin
+
+Liste des présences (filtres)
+
+Approbation individuelle
+
+Approbation en lot
+
+Module 6 : Fonctionnalités avancées
+Validation 30 caractères
+
+Gestion fichiers (max 5Mo)
+
+Calcul heures travaillées
+
+Statistiques simples
+

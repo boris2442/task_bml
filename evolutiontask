@@ -1,0 +1,124 @@
+1. Modèles (Eloquent) + Relations
+2. Migrations (déjà faites)
+3. Factories + Seeders (données de test)
+4. Routes API/web (structure de base)
+5. Controllers (méthodes vides d'abord)
+6. Requests (validation)
+
+
+PHASE 2 : Authentification et rôles
+
+7. Resources (transformers)
+8. Mise en place de l'auth (Breeze/Jetstream)
+9. Middleware pour rôles (admin/employe)
+10. Tests des routes protégées
+
+
+
+PHASE 3 : Frontend - Structure
+
+
+11. Layouts Inertia (AdminLayout, EmployeLayout)
+12. Composants Vue réutilisables (Button, Modal, Table)
+13. Pages vides avec juste le titre
+
+
+
+PHASE 4 : Fonctionnalités employé
+14. Dashboard employé
+15. Formulaire signaler arrivée
+16. Formulaire signaler départ + upload fichiers
+17. Historique des présences
+
+
+PHASE 5 : Fonctionnalités admin
+18. Dashboard admin
+19. Liste des présences à approuver
+20. Modal d'approbation (avec commentaire)
+21. Filtres (date, employé)
+22. Approbation en lot
+
+
+
+PHASE 6 : Finalisation
+
+23. Notifications (optionnel)
+24. Tests utilisateurs
+25. Déploiement
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Découpage en modules pour suivre l'avancement :
+Module 1 : Cœur de l'application ✅
+Migrations (4 tables)
+
+Module 2 : Authentification & Modèles
+Modèles User, Presence, Justificatif, Approbation
+
+Relations entre modèles
+
+Factories pour données de test
+
+Installation de Breeze/Jetstream avec Inertia
+
+Middleware Admin
+
+Module 3 : Base frontend
+Layouts Inertia
+
+Composants communs
+
+Pages de base (accueil, login, register)
+
+Module 4 : Espace employé
+Dashboard employé
+
+Signalement arrivée
+
+Signalement départ + upload
+
+Historique
+
+Module 5 : Espace admin
+Dashboard admin
+
+Liste des présences (filtres)
+
+Approbation individuelle
+
+Approbation en lot
+
+Module 6 : Fonctionnalités avancées
+Validation 30 caractères
+
+Gestion fichiers (max 5Mo)
+
+Calcul heures travaillées
+
+Statistiques simples
+
