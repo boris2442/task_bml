@@ -14,6 +14,11 @@ class Presence extends Model
         'date_presence',
         'statut',
     ];
+    protected $casts = [
+        'heure_arrivee' => 'datetime',
+        'heure_depart' => 'datetime',
+        'date_presence' => 'date',
+    ];
     public function user()
     {
         return $this->belongsTo(User::class);

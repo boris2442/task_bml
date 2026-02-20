@@ -31,6 +31,7 @@ import { computed } from 'vue';
 // stocker les data  de utilisateurdans une variable user
 //import { useAuth } from '@/composables/useAuth';
 import presence from '@/routes/presence';
+import dashboardFrontend from '@/routes/employe';
 // const mainNavItems: NavItem[] = [
 //     {
 //         title: 'Dashboard',
@@ -55,23 +56,30 @@ const mainNavItems = computed<NavItem[]>(() => {
         // items.push(
         // ...(user.value?.role === 'employe'
         //     ? [
-                  {
-                      title: 'Signaler arrivée',
-                      href: presence.arrivee().url,
-                      icon: LogIn,
-                  },
-                  {
-                      title: 'Signaler départ',
-                      href: presence.depart().url,
-                      icon: LogOut,
-                  },
-                  {
-                      title: 'Mon historique',
-                      href: presence.historique().url,
-                      icon: History,
-                  },
-            //   ]
-            // : []),
+        {
+            title: 'Signaler arrivée',
+            href: presence.arrivee().url,
+            icon: LogIn,
+        },
+        {
+            title: 'Signaler départ',
+            href: presence.depart().url,
+            icon: LogOut,
+        },
+        {
+            title: 'Mon historique',
+            href: presence.historique().url,
+            icon: History,
+        },
+
+        {
+            title: 'Mon Dashboard',
+            href: dashboardFrontend.dashboard().url,
+            icon: LayoutGrid,
+        },
+
+        //   ]
+        // : []),
         // );
         // }
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Employe\DashboardUserConttoller;
 use App\Http\Controllers\Employe\PresenceController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -22,6 +23,7 @@ Route::prefix('presence')->name('presence.')->group(function () {
     Route::get('/historique', [PresenceController::class, 'historique'])->name('historique');
 });
 
+Route::get('/employe/dashboard', [DashboardUserConttoller::class, 'dashboard'])->name('employe.dashboard');
 
 
 
