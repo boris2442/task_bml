@@ -20,7 +20,7 @@ class CheckRole
 
     public function handle(Request $request, Closure $next, string $role): Response
     {
-        if ($request->user()->role !== $role) {
+        if ($request->user()->role !== 'admin') {
             abort(403, 'Accès non autorisé.');
         }
 
