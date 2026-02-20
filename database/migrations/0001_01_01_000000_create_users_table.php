@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('prenom');
-            $table->string('email')->unique();
+            $table->string('matricule')->unique();              
 
             $table->enum('role', ['admin', 'employe'])->default('employe');
             $table->timestamp('date_inscription')->useCurrent();

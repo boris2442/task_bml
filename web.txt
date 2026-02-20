@@ -1,0 +1,34 @@
+<?php
+// routes/web.php
+
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Employe\PresenceController;
+use App\Http\Controllers\Admin\ApprobationController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', function () {
+    return Inertia::render('Welcome');
+});
+
+Route::middleware(['auth'])->group(function () {
+    
+    // Dashboard (redirige selon le rôle)
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
+    // Routes pour les employés
+    Route::middleware(['role:employe'])->prefix('employe')->name('employe.')->group(function () {
+        Route::get('/presences', [PresenceController::class, 'index'])->name('presences.index');
+        Route::post('/presences/arrivee', [PresenceController::class, 'arrivee'])->name('presences.arrivee');
+        Route::post('/presences/depart/{presence}', [PresenceController::class, 'depart'])->name('presences.depart');
+        Route::get('/historique', [PresenceController::class, 'historique'])->name('historique');
+    });
+    
+    // Routes pour l'admin
+    Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/presences', [ApprobationController::class, 'index'])->name('presences.index');
+        Route::post('/presences/{presence}/approuver-arrivee', [ApprobationController::class, 'approuverArrivee'])->name('presences.approuver-arrivee');
+        Route::post('/presences/{presence}/approuver-depart', [ApprobationController::class, 'approuverDepart'])->name('presences.approuver-depart');
+        Route::post('/presences/{presence}/rejeter', [ApprobationController::class, 'rejeter'])->name('presences.rejeter');
+        Route::post('/presences/approbation-lot', [ApprobationController::class, 'approbationLot'])->name('presences.approbation-lot');
+    });
+});

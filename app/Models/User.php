@@ -22,6 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'matricule'  // On ajoute matricule dans fillable
     ];
 
     /**
@@ -50,15 +52,40 @@ class User extends Authenticatable
         ];
     }
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Générer le matricule automatiquement à la création
+        static::creating(function ($user) {
+            $user->matricule = self::generateMatricule();
+        });
+    }
+
+    /**
+     * Génère un matricule unique de 10 caractères (lettres et chiffres)
+     * Format: EMP suivi de 7 caractères aléatoires (ex: EMP-A7F92B1)
+     */
+    public static function generateMatricule(): string
+    {
+        do {
+            // EMP + 7 caractères aléatoires (lettres majuscules + chiffres)
+            $matricule = 'BML-' . strtoupper(substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 7));
+        } while (self::where('matricule', $matricule)->exists()); // Vérifier l'unicité
+
+        return $matricule;
+    }
+
+
 
 
     public function presences()
-{
-    return $this->hasMany(Presence::class);
-}
+    {
+        return $this->hasMany(Presence::class);
+    }
 
-public function approbations()
-{
-    return $this->hasMany(Approbation::class, 'admin_id');
-}
+    public function approbations()
+    {
+        return $this->hasMany(Approbation::class, 'admin_id');
+    }
 }
