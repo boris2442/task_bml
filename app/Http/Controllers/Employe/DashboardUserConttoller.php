@@ -33,6 +33,29 @@ class DashboardUserConttoller extends Controller
             $joursPresence++;
         }
 
+
+
+        // Calculer les heures par jour de la semaine
+        $heuresSemaine = [];
+        for ($i = 0; $i < 7; $i++) {
+            $date = Carbon::now()->startOfWeek()->addDays($i);
+            $presence = Presence::where('user_id', $user->id)
+                ->whereDate('date_presence', $date)
+                ->whereNotNull('heure_depart')
+                ->first();
+
+            if ($presence) {
+                $heures = $presence->heure_depart->diffInHours($presence->heure_arrivee);
+                $heuresSemaine[] = round($heures, 1);
+            } else {
+                $heuresSemaine[] = 0;
+            }
+        }
+
+
+
+
+
         // Récupérer les 5 dernières présences
         $recentes = Presence::where('user_id', $user->id)
             ->orderBy('date_presence', 'desc')
@@ -64,6 +87,8 @@ class DashboardUserConttoller extends Controller
             'stats' => [
                 'heures_mois' => round($heuresMois, 1),
                 'jours_presence' => $joursPresence,
+                'heures_semaine' => $heuresSemaine,
+                'objectif_mois' => 80, // Objectif mensuel
             ],
             'recentes' => $recentes,
         ]);
