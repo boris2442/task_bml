@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
 import { dashboard, login, register } from '@/routes';
 
@@ -839,4 +839,594 @@ withDefaults(
         </div>
         <div class="hidden h-14.5 lg:block"></div>
     </div>
+</template> -->
+
+<script setup lang="ts">
+import { Head, Link } from '@inertiajs/vue3';
+import { dashboard, login, register } from '@/routes';
+import { onMounted, ref } from 'vue';
+
+withDefaults(
+    defineProps<{
+        canRegister: boolean;
+    }>(),
+    {
+        canRegister: true,
+    },
+);
+
+// Animation states
+const isVisible = ref(false);
+const heroRef = ref<HTMLElement | null>(null);
+
+onMounted(() => {
+    // Déclencher les animations après le montage
+    setTimeout(() => {
+        isVisible.value = true;
+    }, 100);
+});
+</script>
+
+<template>
+    <Head title="Bienvenue - Gestion de Présence">
+        <link rel="preconnect" href="https://rsms.me/" />
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+    </Head>
+
+    <div
+        class="relative min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800"
+        :class="{ 'animate-fade-in': isVisible }"
+    >
+        <!-- Background Pattern -->
+        <div class="pointer-events-none absolute inset-0 overflow-hidden">
+            <div
+                class="animate-blob absolute -top-40 -right-40 h-80 w-80 rounded-full bg-blue-400 opacity-20 mix-blend-multiply blur-3xl filter"
+            ></div>
+            <div
+                class="animate-blob animation-delay-2000 absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-purple-400 opacity-20 mix-blend-multiply blur-3xl filter"
+            ></div>
+            <div
+                class="animate-blob animation-delay-4000 absolute top-40 left-40 h-80 w-80 rounded-full bg-yellow-400 opacity-20 mix-blend-multiply blur-3xl filter"
+            ></div>
+        </div>
+
+        <!-- Header -->
+        <header
+            class="relative z-10 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8"
+        >
+            <nav class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <div
+                        class="flex h-10 w-10 transform items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg transition-transform duration-300 hover:scale-105"
+                    >
+                        <span class="text-xl font-bold text-white">GP</span>
+                    </div>
+                    <span
+                        class="bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-xl font-semibold text-transparent dark:from-white dark:to-gray-300"
+                    >
+                        Gestion Présence
+                    </span>
+                </div>
+
+                <!-- Navigation -->
+                <div class="flex items-center gap-4">
+                    <Link
+                        v-if="$page.props.auth.user"
+                        :href="dashboard()"
+                        class="group relative px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors duration-300 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white"
+                    >
+                        Dashboard
+                        <span
+                            class="absolute bottom-0 left-0 h-0.5 w-0 bg-blue-600 transition-all duration-300 group-hover:w-full"
+                        ></span>
+                    </Link>
+                    <template v-else>
+                        <Link
+                            :href="login()"
+                            class="group relative px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors duration-300 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white"
+                        >
+                            Connexion
+                            <span
+                                class="absolute bottom-0 left-0 h-0.5 w-0 bg-blue-600 transition-all duration-300 group-hover:w-full"
+                            ></span>
+                        </Link>
+                        <Link
+                            v-if="canRegister"
+                            :href="register()"
+                            class="transform rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-5 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                        >
+                            Inscription
+                        </Link>
+                    </template>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Hero Section -->
+        <main
+            class="relative z-10 mx-auto max-w-7xl px-4 pt-20 pb-16 sm:px-6 lg:px-8"
+        >
+            <div class="grid items-center gap-12 lg:grid-cols-2">
+                <!-- Left Content -->
+                <div
+                    class="space-y-8"
+                    :class="{ 'animate-slide-in-left': isVisible }"
+                >
+                    <div class="space-y-4">
+                        <h1
+                            class="text-5xl leading-tight font-bold md:text-6xl"
+                        >
+                            <span
+                                class="bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent dark:from-white dark:to-gray-300"
+                            >
+                                Gérez les présences
+                            </span>
+                            <br />
+                            <span
+                                class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
+                            >
+                                de vos employés
+                            </span>
+                        </h1>
+                        <p
+                            class="max-w-lg text-xl text-gray-600 dark:text-gray-300"
+                        >
+                            Une solution simple et efficace pour suivre les
+                            arrivées, départs et justificatifs de votre équipe
+                            en temps réel.
+                        </p>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div
+                            class="flex items-center space-x-2 rounded-xl bg-white p-3 shadow-sm transition-shadow duration-300 hover:shadow-md dark:bg-gray-800"
+                        >
+                            <div
+                                class="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/30"
+                            >
+                                <svg
+                                    class="h-5 w-5 text-green-600 dark:text-green-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M5 13l4 4L19 7"
+                                    />
+                                </svg>
+                            </div>
+                            <span
+                                class="text-sm font-medium text-gray-700 dark:text-gray-200"
+                                >Arrivées/Départs</span
+                            >
+                        </div>
+                        <div
+                            class="flex items-center space-x-2 rounded-xl bg-white p-3 shadow-sm transition-shadow duration-300 hover:shadow-md dark:bg-gray-800"
+                        >
+                            <div
+                                class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/30"
+                            >
+                                <svg
+                                    class="h-5 w-5 text-blue-600 dark:text-blue-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                    />
+                                </svg>
+                            </div>
+                            <span
+                                class="text-sm font-medium text-gray-700 dark:text-gray-200"
+                                >Justificatifs</span
+                            >
+                        </div>
+                        <div
+                            class="flex items-center space-x-2 rounded-xl bg-white p-3 shadow-sm transition-shadow duration-300 hover:shadow-md dark:bg-gray-800"
+                        >
+                            <div
+                                class="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900/30"
+                            >
+                                <svg
+                                    class="h-5 w-5 text-purple-600 dark:text-purple-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                                    />
+                                </svg>
+                            </div>
+                            <span
+                                class="text-sm font-medium text-gray-700 dark:text-gray-200"
+                                >Approbations</span
+                            >
+                        </div>
+                        <div
+                            class="flex items-center space-x-2 rounded-xl bg-white p-3 shadow-sm transition-shadow duration-300 hover:shadow-md dark:bg-gray-800"
+                        >
+                            <div
+                                class="flex h-10 w-10 items-center justify-center rounded-lg bg-yellow-100 dark:bg-yellow-900/30"
+                            >
+                                <svg
+                                    class="h-5 w-5 text-yellow-600 dark:text-yellow-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                </svg>
+                            </div>
+                            <span
+                                class="text-sm font-medium text-gray-700 dark:text-gray-200"
+                                >Historique</span
+                            >
+                        </div>
+                    </div>
+
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-wrap gap-4">
+                        <Link
+                            :href="register()"
+                            class="transform rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-4 font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                        >
+                            Commencer maintenant
+                            <svg
+                                class="ml-2 inline-block h-5 w-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                                />
+                            </svg>
+                        </Link>
+                        <a
+                            href="#demo"
+                            class="rounded-xl border border-gray-200 bg-white px-8 py-4 font-semibold text-gray-700 transition-all duration-300 hover:border-blue-600 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:border-blue-600"
+                        >
+                            Voir la démo
+                        </a>
+                    </div>
+
+                    <!-- Stats -->
+                    <div
+                        class="flex items-center gap-8 border-t border-gray-200 pt-8 dark:border-gray-700"
+                    >
+                        <div class="text-center">
+                            <div
+                                class="text-2xl font-bold text-gray-900 dark:text-white"
+                            >
+                                1000+
+                            </div>
+                            <div
+                                class="text-sm text-gray-500 dark:text-gray-400"
+                            >
+                                Utilisateurs
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div
+                                class="text-2xl font-bold text-gray-900 dark:text-white"
+                            >
+                                50k+
+                            </div>
+                            <div
+                                class="text-sm text-gray-500 dark:text-gray-400"
+                            >
+                                Présences
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div
+                                class="text-2xl font-bold text-gray-900 dark:text-white"
+                            >
+                                99%
+                            </div>
+                            <div
+                                class="text-sm text-gray-500 dark:text-gray-400"
+                            >
+                                Satisfaction
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Content - Illustration -->
+                <div
+                    class="relative"
+                    :class="{ 'animate-slide-in-right': isVisible }"
+                >
+                    <div
+                        class="relative rounded-3xl bg-gradient-to-br from-blue-500 to-purple-600 p-1 shadow-2xl"
+                    >
+                        <div class="rounded-3xl bg-white p-6 dark:bg-gray-800">
+                            <!-- Dashboard Preview -->
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <div
+                                            class="h-8 w-8 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600"
+                                        ></div>
+                                        <span class="font-semibold"
+                                            >Tableau de bord</span
+                                        >
+                                    </div>
+                                    <div class="flex space-x-1">
+                                        <div
+                                            class="h-2 w-2 rounded-full bg-red-500"
+                                        ></div>
+                                        <div
+                                            class="h-2 w-2 rounded-full bg-yellow-500"
+                                        ></div>
+                                        <div
+                                            class="h-2 w-2 rounded-full bg-green-500"
+                                        ></div>
+                                    </div>
+                                </div>
+
+                                <!-- Stats Cards -->
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div
+                                        class="rounded-lg bg-yellow-50 p-2 dark:bg-yellow-900/20"
+                                    >
+                                        <div
+                                            class="text-xs text-yellow-600 dark:text-yellow-400"
+                                        >
+                                            Arrivées
+                                        </div>
+                                        <div
+                                            class="text-lg font-bold text-yellow-700 dark:text-yellow-300"
+                                        >
+                                            24
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="rounded-lg bg-blue-50 p-2 dark:bg-blue-900/20"
+                                    >
+                                        <div
+                                            class="text-xs text-blue-600 dark:text-blue-400"
+                                        >
+                                            Départs
+                                        </div>
+                                        <div
+                                            class="text-lg font-bold text-blue-700 dark:text-blue-300"
+                                        >
+                                            18
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="rounded-lg bg-green-50 p-2 dark:bg-green-900/20"
+                                    >
+                                        <div
+                                            class="text-xs text-green-600 dark:text-green-400"
+                                        >
+                                            Validés
+                                        </div>
+                                        <div
+                                            class="text-lg font-bold text-green-700 dark:text-green-300"
+                                        >
+                                            42
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Activity List -->
+                                <div class="space-y-2">
+                                    <div
+                                        class="animate-pulse-slow flex items-center justify-between rounded-lg bg-gray-50 p-2 dark:bg-gray-700/50"
+                                    >
+                                        <div
+                                            class="flex items-center space-x-2"
+                                        >
+                                            <div
+                                                class="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-600"
+                                            ></div>
+                                            <div>
+                                                <div
+                                                    class="h-3 w-24 rounded bg-gray-200 dark:bg-gray-600"
+                                                ></div>
+                                                <div
+                                                    class="mt-1 h-2 w-16 rounded bg-gray-200 dark:bg-gray-600"
+                                                ></div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="h-6 w-16 rounded-full bg-yellow-200 dark:bg-yellow-900/30"
+                                        ></div>
+                                    </div>
+                                    <div
+                                        class="animate-pulse-slow animation-delay-200 flex items-center justify-between rounded-lg bg-gray-50 p-2 dark:bg-gray-700/50"
+                                    >
+                                        <div
+                                            class="flex items-center space-x-2"
+                                        >
+                                            <div
+                                                class="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-600"
+                                            ></div>
+                                            <div>
+                                                <div
+                                                    class="h-3 w-24 rounded bg-gray-200 dark:bg-gray-600"
+                                                ></div>
+                                                <div
+                                                    class="mt-1 h-2 w-16 rounded bg-gray-200 dark:bg-gray-600"
+                                                ></div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="h-6 w-16 rounded-full bg-blue-200 dark:bg-blue-900/30"
+                                        ></div>
+                                    </div>
+                                    <div
+                                        class="animate-pulse-slow animation-delay-400 flex items-center justify-between rounded-lg bg-gray-50 p-2 dark:bg-gray-700/50"
+                                    >
+                                        <div
+                                            class="flex items-center space-x-2"
+                                        >
+                                            <div
+                                                class="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-600"
+                                            ></div>
+                                            <div>
+                                                <div
+                                                    class="h-3 w-24 rounded bg-gray-200 dark:bg-gray-600"
+                                                ></div>
+                                                <div
+                                                    class="mt-1 h-2 w-16 rounded bg-gray-200 dark:bg-gray-600"
+                                                ></div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="h-6 w-16 rounded-full bg-green-200 dark:bg-green-900/30"
+                                        ></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating Elements -->
+                    <div
+                        class="animate-float absolute -top-4 -right-4 h-20 w-20 rotate-12 rounded-2xl bg-gradient-to-r from-yellow-400 to-orange-500 shadow-xl"
+                    ></div>
+                    <div
+                        class="animate-float animation-delay-1000 absolute -bottom-4 -left-4 h-16 w-16 -rotate-12 rounded-2xl bg-gradient-to-r from-green-400 to-blue-500 shadow-xl"
+                    ></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer
+            class="relative z-10 mx-auto mt-20 max-w-7xl px-4 py-8 sm:px-6 lg:px-8"
+        >
+            <div class="text-center text-sm text-gray-500 dark:text-gray-400">
+                © 2026 Gestion Présence. Tous droits réservés.
+            </div>
+        </footer>
+    </div>
 </template>
+
+<style scoped>
+/* Animations */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slide-in-left {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slide-in-right {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes blob {
+    0% {
+        transform: translate(0px, 0px) scale(1);
+    }
+    33% {
+        transform: translate(30px, -50px) scale(1.1);
+    }
+    66% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+    100% {
+        transform: translate(0px, 0px) scale(1);
+    }
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0px) rotate(12deg);
+    }
+    50% {
+        transform: translateY(-20px) rotate(12deg);
+    }
+}
+
+.animate-fade-in {
+    animation: fade-in 1s ease-out forwards;
+}
+
+.animate-slide-in-left {
+    animation: slide-in-left 0.8s ease-out forwards;
+}
+
+.animate-slide-in-right {
+    animation: slide-in-right 0.8s ease-out forwards;
+}
+
+.animate-blob {
+    animation: blob 7s infinite;
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animation-delay-200 {
+    animation-delay: 200ms;
+}
+
+.animation-delay-400 {
+    animation-delay: 400ms;
+}
+
+.animation-delay-1000 {
+    animation-delay: 1000ms;
+}
+
+.animation-delay-2000 {
+    animation-delay: 2000ms;
+}
+
+.animation-delay-4000 {
+    animation-delay: 4000ms;
+}
+</style>

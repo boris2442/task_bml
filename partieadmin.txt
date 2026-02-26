@@ -1,0 +1,129 @@
+<!-- DashboardAdmin.vue -->
+- KPI globaux :
+  - Total employés actifs
+  - Présences aujourd'hui
+  - En attente d'approbation (arrivées + départs)
+  - Heures totales aujourd'hui
+  
+- Graphiques :
+  - Présences par jour (semaine)
+  - Heures par employé (barres)
+  - Taux d'approbation
+  
+- Alertes :
+  - Demandes en attente urgentes
+  - Employés absents aujourd'hui
+  - Retards signalés
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Admin/Approbations.vue -->
+- 2 onglets :
+  - 🟡 Arrivées en attente
+  - 🟠 Départs en attente
+
+- Pour chaque demande :
+  - Employé + matricule
+  - Heure d'arrivée/départ
+  - Description du travail
+  - Justificatifs (photos/PDF) à prévisualiser
+  - Boutons : ✅ Approuver | ❌ Rejeter + motif
+
+- Actions en lot :
+  - Cocher plusieurs et approuver en masse
+  - Filtrer par date/employé
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Modal de validation -->
+- Infos employé
+- Timeline de la journée
+- Description détaillée
+- Galerie des justificatifs
+- Champ pour commentaire (si rejet)
+- Historique des modifications
+
+
+
+
+
+
+<!-- Admin/Justificatifs.vue -->
+- Galerie des photos/PDF soumis
+- Zoom sur les images
+- Téléchargement des fichiers
+- Validation par lot
+- Signalement de fraude
+
+
+
+
+
+<!-- Admin/Rapports.vue -->
+- Filtres :
+  - Période (jour/semaine/mois/personnalisé)
+  - Employé (individuel ou groupe)
+  - Statut (validé/en attente/rejeté)
+
+- Export :
+  - PDF (bulletin individuel)
+  - Excel (tableau global)
+  - CSV (pour paie)
+
+- Statistiques avancées :
+  - Taux de présence par employé
+  - Heures supplémentaires
+  - Retards récurrents
+  - Moyennes par service
+
+
+
+
+
+
+
+
+<!-- Admin/Parametres.vue -->
+- Configuration générale :
+  - Heures de travail par défaut (4h)
+  - Jours travaillés (lundi-samedi)
+  - Plage horaire autorisée (ex: 8h-20h)
+
+- Notifications :
+  - Alertes email pour nouvelles demandes
+  - Rappels aux employés
+
+- Sécurité :
+  - Logs des actions admin
+  - Historique des approbations
+
+
+
+
+// Notifications aux admins
+- Nouvelle demande d'arrivée
+- Nouveau départ avec justificatifs
+- Employé en retard (pas signalé)
+
+// Notifications aux employés
+- Arrivée approuvée/rejetée
+- Départ validé
+- Rappel de départ (si > 4h)
