@@ -874,7 +874,7 @@ onMounted(() => {
     </Head>
 
     <div
-        class="relative min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800"
+        class="relative min-h-screen bg-linear-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800"
         :class="{ 'animate-fade-in': isVisible }"
     >
         <!-- Background Pattern -->
@@ -898,12 +898,12 @@ onMounted(() => {
                 <!-- Logo -->
                 <div class="flex items-center space-x-2">
                     <div
-                        class="flex h-10 w-10 transform items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg transition-transform duration-300 hover:scale-105"
+                        class="flex h-10 w-10 transform items-center justify-center rounded-xl bg-linear-to-r from-blue-600 to-purple-600 shadow-lg transition-transform duration-300 hover:scale-105"
                     >
                         <span class="text-xl font-bold text-white">GP</span>
                     </div>
                     <span
-                        class="bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-xl font-semibold text-transparent dark:from-white dark:to-gray-300"
+                        class="bg-linear-to-r from-gray-900 to-gray-600 bg-clip-text text-xl font-semibold text-transparent dark:from-white dark:to-gray-300"
                     >
                         Gestion Présence
                     </span>
@@ -934,7 +934,7 @@ onMounted(() => {
                         <Link
                             v-if="canRegister"
                             :href="register()"
-                            class="transform rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-5 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                            class="transform rounded-lg bg-linear-to-r from-blue-600 to-purple-600 px-5 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
                         >
                             Inscription
                         </Link>
@@ -958,13 +958,13 @@ onMounted(() => {
                             class="text-5xl leading-tight font-bold md:text-6xl"
                         >
                             <span
-                                class="bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent dark:from-white dark:to-gray-300"
+                                class="bg-linear-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent dark:from-white dark:to-gray-300"
                             >
                                 Gérez les présences
                             </span>
                             <br />
                             <span
-                                class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
+                                class="bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
                             >
                                 de vos employés
                             </span>
@@ -1086,7 +1086,7 @@ onMounted(() => {
                     <div class="flex flex-wrap gap-4">
                         <Link
                             :href="register()"
-                            class="transform rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-4 font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                            class="transform rounded-xl bg-linear-to-r from-blue-600 to-purple-600 px-8 py-4 font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
                         >
                             Commencer maintenant
                             <svg
@@ -1160,7 +1160,7 @@ onMounted(() => {
                     :class="{ 'animate-slide-in-right': isVisible }"
                 >
                     <div
-                        class="relative rounded-3xl bg-gradient-to-br from-blue-500 to-purple-600 p-1 shadow-2xl"
+                        class="relative rounded-3xl bg-linear-to-br from-blue-500 to-purple-600 p-1 shadow-2xl"
                     >
                         <div class="rounded-3xl bg-white p-6 dark:bg-gray-800">
                             <!-- Dashboard Preview -->
@@ -1168,7 +1168,7 @@ onMounted(() => {
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center space-x-2">
                                         <div
-                                            class="h-8 w-8 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600"
+                                            class="h-8 w-8 rounded-lg bg-linear-to-r from-blue-600 to-purple-600"
                                         ></div>
                                         <span class="font-semibold"
                                             >Tableau de bord</span
@@ -1308,10 +1308,10 @@ onMounted(() => {
 
                     <!-- Floating Elements -->
                     <div
-                        class="animate-float absolute -top-4 -right-4 h-20 w-20 rotate-12 rounded-2xl bg-gradient-to-r from-yellow-400 to-orange-500 shadow-xl"
+                        class="animate-float absolute -top-4 -right-4 h-20 w-20 rotate-12 rounded-2xl bg-linear-to-r from-yellow-400 to-orange-500 shadow-xl"
                     ></div>
                     <div
-                        class="animate-float animation-delay-1000 absolute -bottom-4 -left-4 h-16 w-16 -rotate-12 rounded-2xl bg-gradient-to-r from-green-400 to-blue-500 shadow-xl"
+                        class="animate-float animation-delay-1000 absolute -bottom-4 -left-4 h-16 w-16 -rotate-12 rounded-2xl bg-linear-to-r from-green-400 to-blue-500 shadow-xl"
                     ></div>
                 </div>
             </div>

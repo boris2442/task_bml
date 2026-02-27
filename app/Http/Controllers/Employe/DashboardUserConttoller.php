@@ -4,59 +4,63 @@ namespace App\Http\Controllers\Employe;
 
 use App\Http\Controllers\Controller;
 use App\Models\Presence;
-use App\Models\User;
+use App\Services\WorkHoursCalculationService;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class DashboardUserConttoller extends Controller
 {
+    protected WorkHoursCalculationService $hoursService;
+
+    public function __construct(WorkHoursCalculationService $hoursService)
+    {
+        $this->hoursService = $hoursService;
+    }
+
     public function dashboard()
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         // Récupérer la présence d'aujourd'hui
         $presenceToday = Presence::where('user_id', $user->id)
             ->whereDate('date_presence', Carbon::today())
             ->first();
 
-        // Calculer les heures du mois
-        $presencesMois = Presence::where('user_id', $user->id)
-            ->whereMonth('date_presence', Carbon::now()->month)
-            ->whereNotNull('heure_depart')
-            ->get();
+        // ===== STATS TOTALES (depuis inscription) =====
+        $statsTotales = $this->hoursService->obtenirStatsUtilisateur($user);
 
-        $heuresMois = 0;
-        $joursPresence = 0;
-        foreach ($presencesMois as $p) {
-            $heuresMois += $p->heure_depart->diffInHours($p->heure_arrivee);
-            $joursPresence++;
-        }
+        // ===== STATS CE MOIS =====
+        $statsThisMonth = $this->hoursService->obtenirStatsUtilisateur(
+            $user,
+            Carbon::now()->startOfMonth(),
+            Carbon::now()->endOfMonth()
+        );
 
+        // ===== STATS CETTE SEMAINE =====
+        $statsThisWeek = $this->hoursService->obtenirStatsUtilisateur(
+            $user,
+            Carbon::now()->startOfWeek(),
+            Carbon::now()->endOfWeek()
+        );
 
-
-        // Calculer les heures par jour de la semaine
+        // ===== HEURES PAR JOUR CETTE SEMAINE =====
         $heuresSemaine = [];
         for ($i = 0; $i < 7; $i++) {
             $date = Carbon::now()->startOfWeek()->addDays($i);
             $presence = Presence::where('user_id', $user->id)
+                ->where('statut', 'validee')
                 ->whereDate('date_presence', $date)
-                ->whereNotNull('heure_depart')
                 ->first();
 
             if ($presence) {
-                $heures = $presence->heure_depart->diffInHours($presence->heure_arrivee);
-                $heuresSemaine[] = round($heures, 1);
+                $heuresSemaine[] = round($presence->heures_travaillees, 1);
             } else {
                 $heuresSemaine[] = 0;
             }
         }
 
-
-
-
-
-        // Récupérer les 5 dernières présences
+        // ===== 5 DERNIÈRES PRÉSENCES =====
         $recentes = Presence::where('user_id', $user->id)
             ->orderBy('date_presence', 'desc')
             ->orderBy('heure_arrivee', 'desc')
@@ -67,28 +71,51 @@ class DashboardUserConttoller extends Controller
                     'id' => $p->id,
                     'date' => Carbon::parse($p->date_presence)->format('d/m/Y'),
                     'statut' => $p->statut,
-                    'heures' => $p->heure_depart
-                        ? round($p->heure_depart->diffInHours($p->heure_arrivee), 1)
-                        : 0,
+                    'heures' => $p->heures_travaillees ?? 0,
+                    'heures_supp' => $p->heures_supplementaires ?? 0,
                 ];
             });
+
+        // ===== HEURES SUPP TOTALES =====
+        $heuresSupp = Presence::where('user_id', $user->id)
+            ->where('statut', 'validee')
+            ->sum('heures_supplementaires');
 
         return Inertia::render('employe/DashboardEmploye', [
             'user' => [
                 'role' => $user->role,
-                'nom' => $user->nom,
-                'prenom' => $user->prenom,
+                'name' => $user->name,
+                'matricule' => $user->matricule,
             ],
             'ma_presence' => $presenceToday ? [
                 'heure_arrivee' => $presenceToday->heure_arrivee,
                 'heure_depart' => $presenceToday->heure_depart,
                 'statut' => $presenceToday->statut,
+                'heures_travaillees' => $presenceToday->heures_travaillees ?? 0,
+                'heures_supplementaires' => $presenceToday->heures_supplementaires ?? 0,
             ] : null,
             'stats' => [
-                'heures_mois' => round($heuresMois, 1),
-                'jours_presence' => $joursPresence,
+                // Total depuis inscription
+                'heures_total' => round($statsTotales['heures_reelles'], 1),
+                'heures_total_attendues' => round($statsTotales['heures_attendues'], 1),
+                'pourcentage_total' => round($statsTotales['pourcentage'], 2),
+                'en_retard_total' => $statsTotales['en_retard'],
+
+                // Ce mois
+                'heures_mois' => round($statsThisMonth['heures_reelles'], 1),
+                'heures_mois_attendues' => round($statsThisMonth['heures_attendues'], 1),
+                'pourcentage_mois' => round($statsThisMonth['pourcentage'], 2),
+                'objectif_mois' => 80, // Seuil d'alerte
+
+                // Cette semaine
+                'heures_semaine_total' => round($statsThisWeek['heures_reelles'], 1),
+                'heures_semaine_attendues' => round($statsThisWeek['heures_attendues'], 1),
+
+                // Jour par jour
                 'heures_semaine' => $heuresSemaine,
-                'objectif_mois' => 80, // Objectif mensuel
+
+                // Supplémentaires
+                'heures_supplementaires_total' => round($heuresSupp, 1),
             ],
             'recentes' => $recentes,
         ]);

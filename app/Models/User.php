@@ -76,8 +76,25 @@ class User extends Authenticatable
         return $matricule;
     }
 
+    /**
+     * Calculer le nombre total d'heures travaillées (validées et approuvées)
+     * Uniquement les présences avec statut 'validee' sont comptabilisées
+     */
+    public function getTotalHeuresAttribute(): float
+    {
+        $presences = $this->presences()
+            ->where('statut', 'validee')
+            ->get();
 
+        $totalHeures = 0;
+        foreach ($presences as $presence) {
+            if ($presence->heure_depart) {
+                $totalHeures += $presence->heure_depart->diffInHours($presence->heure_arrivee);
+            }
+        }
 
+        return $totalHeures;
+    }
 
     public function presences()
     {
@@ -87,5 +104,10 @@ class User extends Authenticatable
     public function approbations()
     {
         return $this->hasMany(Approbation::class, 'admin_id');
+    }
+
+    public function workSchedule()
+    {
+        return $this->hasOne(WorkSchedule::class);
     }
 }

@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Approbation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class ApprobationController extends Controller
@@ -79,7 +80,7 @@ class ApprobationController extends Controller
         // Enregistrer l'approbation
         Approbation::create([
             'presence_id' => $presence->id,
-            'admin_id' => auth()->id(),
+            'admin_id' => Auth::id(),
             'type_approbation' => 'arrivee',
             'statut_approbation' => 'approuve',
         ]);
@@ -102,7 +103,7 @@ class ApprobationController extends Controller
 
         Approbation::create([
             'presence_id' => $presence->id,
-            'admin_id' => auth()->id(),
+            'admin_id' => Auth::id(),
             'type_approbation' => 'depart_justificatifs',
             'statut_approbation' => 'approuve',
         ]);
@@ -125,7 +126,7 @@ class ApprobationController extends Controller
 
         Approbation::create([
             'presence_id' => $presence->id,
-            'admin_id' => auth()->id(),
+            'admin_id' => Auth::id(),
             'type_approbation' => $presence->statut === 'arrivee_en_attente' ? 'arrivee' : 'depart_justificatifs',
             'statut_approbation' => 'rejete',
             'commentaire' => $request->motif,
@@ -149,16 +150,14 @@ class ApprobationController extends Controller
         $count = 0;
         foreach ($request->ids as $id) {
             $presence = Presence::find($id);
-            
+
             if ($request->action === 'approuver_arrivee' && $presence->statut === 'arrivee_en_attente') {
                 $presence->update(['statut' => 'arrivee_approuvee']);
                 $count++;
-            }
-            elseif ($request->action === 'approuver_depart' && $presence->statut === 'depart_en_attente') {
+            } elseif ($request->action === 'approuver_depart' && $presence->statut === 'depart_en_attente') {
                 $presence->update(['statut' => 'validee']);
                 $count++;
-            }
-            elseif ($request->action === 'rejeter') {
+            } elseif ($request->action === 'rejeter') {
                 $presence->update(['statut' => 'rejetee']);
                 $count++;
             }
@@ -177,5 +176,26 @@ class ApprobationController extends Controller
         return Inertia::render('admin/PresenceDetail', [
             'presence' => $presence
         ]);
+    }
+
+    /**
+     * Télécharger un justificatif de manière sécurisée
+     */
+    public function telechargerJustificatif(Presence $presence, $justificatifId)
+    {
+        // Vérifier que le justificatif appartient bien à cette présence
+        $justificatif = $presence->justificatifs()->where('id', $justificatifId)->first();
+
+        if (!$justificatif) {
+            abort(404, 'Justificatif non trouvé');
+        }
+
+        $filePath = storage_path('app/public/' . $justificatif->chemin_fichier);
+
+        if (!file_exists($filePath)) {
+            abort(404, 'Fichier non trouvé');
+        }
+
+        return response()->download($filePath, $justificatif->nom_fichier);
     }
 }

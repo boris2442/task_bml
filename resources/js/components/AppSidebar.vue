@@ -26,7 +26,7 @@ import { type NavItem } from '@/types';
 import AppLogo from './AppLogo.vue';
 import { dashboard } from '@/routes';
 import { computed } from 'vue';
-import approbations from '@/routes/approbations';
+
 import presence from '@/routes/presence';
 import dashboardFrontend from '@/routes/employe';
 
@@ -78,6 +78,11 @@ const mainNavItems = computed<NavItem[]>(() => {
                 href: '/admin/approbations',
                 icon: CheckCircle,
             },
+            {
+                title: 'Gestion des utilisateurs',
+                href: '/admin/users',
+                icon: Users,
+            },
         );
         // Tu peux ajouter d'autres items admin ici
     }
@@ -87,7 +92,7 @@ const mainNavItems = computed<NavItem[]>(() => {
 
 const footerNavItems: NavItem[] = [
     {
-        title: 'Github Repo',
+        title: 'Source Code',
         href: 'https://github.com/laravel/vue-starter-kit',
         icon: Folder,
     },

@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Approbation extends Model
 {
+    protected $fillable = [
+        'presence_id',
+        'admin_id',
+        'statut',
+        'commentaire',
+    ];
     public function presence()
     {
         return $this->belongsTo(Presence::class);

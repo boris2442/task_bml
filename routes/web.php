@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\ApprobationController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Employe\DashboardUserConttoller;
 use App\Http\Controllers\Employe\PresenceController;
 use Illuminate\Support\Facades\Route;
@@ -41,15 +43,26 @@ Route::get('dashboard', function () {
 
 
 
-// routes/web.php
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Dashboard admin
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/rapports', [DashboardController::class, 'rapportsEmployes'])->name('rapports');
+    Route::get('/employes/{user}/detail', [DashboardController::class, 'detailEmploye'])->name('employe.detail');
 
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    // Routes des approbations
     Route::get('/approbations', [ApprobationController::class, 'index'])->name('approbations');
     Route::get('/approbations/{presence}', [ApprobationController::class, 'show'])->name('approbations.show');
     Route::post('/approbations/{presence}/approuver-arrivee', [ApprobationController::class, 'approuverArrivee'])->name('approbations.approuver-arrivee');
     Route::post('/approbations/{presence}/approuver-depart', [ApprobationController::class, 'approuverDepart'])->name('approbations.approuver-depart');
     Route::post('/approbations/{presence}/rejeter', [ApprobationController::class, 'rejeter'])->name('approbations.rejeter');
     Route::post('/approbations/lot', [ApprobationController::class, 'approbationLot'])->name('approbations.lot');
+    Route::get('/approbations/{presence}/justificatif/{justificatif}/download', [ApprobationController::class, 'telechargerJustificatif'])->name('approbations.justificatif.download');
+
+    // Routes des utilisateurs
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 });
 
 
