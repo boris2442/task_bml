@@ -20,6 +20,7 @@ Route::get('/', function () {
 // Routes employé - Présences
 Route::prefix('presence')->name('presence.')->group(function () {
     Route::get('/arrivee', [PresenceController::class, 'createArrivee'])->name('arrivee');
+    Route::get('/', [PresenceController::class, 'createArrivee'])->name('arrivee');
     Route::post('/arrivee', [PresenceController::class, 'storeArrivee'])->name('arrivee.store');
     Route::get('/depart', [PresenceController::class, 'createDepart'])->name('depart');
     Route::post('/depart/{presence}', [PresenceController::class, 'storeDepart'])->name('depart.store');
