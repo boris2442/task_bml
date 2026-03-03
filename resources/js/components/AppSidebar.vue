@@ -93,14 +93,14 @@ const mainNavItems = computed<NavItem[]>(() => {
 const footerNavItems: NavItem[] = [
     {
         title: 'Source Code',
-        href: 'https://github.com/laravel/vue-starter-kit',
+        href: 'https://github.com/boris2442/task_bml',
         icon: Folder,
     },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
-    },
+    // {
+    //     title: 'Documentation',
+    //     href: 'https://laravel.com/docs/starter-kits#vue',
+    //     icon: BookOpen,
+    // },
 ];
 </script>
 
